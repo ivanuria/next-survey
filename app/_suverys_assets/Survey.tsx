@@ -3,7 +3,7 @@ import SurveryThemeProvider from "./theme/SurveyThemeProvider";
 import Header from "./ui/Header";
 
 export default function Survey() {
-  if (process.env.SURVEY !== 'true') return null
+  if (!process.env.NEXT_PUBLIC_SURVEY) return null
   return (
     <SurveryThemeProvider>
       <Header />
