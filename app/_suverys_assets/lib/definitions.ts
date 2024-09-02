@@ -18,3 +18,8 @@ export interface QuestionDefinition {
     target: string
   }[],
 }
+
+export interface StoreDefinition {
+  currentQuestion: number,
+  currentStep: number
+}
