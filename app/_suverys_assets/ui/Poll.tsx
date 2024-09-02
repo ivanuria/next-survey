@@ -1,6 +1,5 @@
 import Question from './Question';
-import { ObjectiveType } from '../lib/enums.js';
-import { QuestionDefinition } from '../lib/definitions';
+import { ObjectiveType } from '../lib/enums';
 
 const questionsTest = [
   {
@@ -29,16 +28,9 @@ const questionsTest = [
   }
 ];
 
-function renderPolls(polls: QuestionDefinition[]) {
-  const questionsToRender = [];
-  polls.forEach((question, index) => {
-    questionsToRender.push(<Question key={index} question={question} />)
-  })
-}
-
 export default function Poll() {
   const polls = [...questionsTest];
   return (
-    <>{renderPolls(polls)}</>
+    <>{polls.map((question, index) => <Question key={index} question={question} index={index}/>)}</>
   );
 }

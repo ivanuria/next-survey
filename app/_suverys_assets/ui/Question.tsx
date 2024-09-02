@@ -1,52 +1,34 @@
-import { useState } from 'react';
+'use client';
 import Explanation from "./Explanation";
 import { QuestionDefinition } from '../lib/definitions';
-
-function renderExplanations(
-  survey: string,
-  question:
-  {
-    title: string,
-    content: string
-  }[],
-  onNext: Function,
-  current: number
-) {
-  const explanationsToReturn = [];
-
-  question.forEach((item, step) => {
-    explanationsToReturn.push(
-      <Explanation
-        key={`${survey}_${step}`}
-        survey={survey}
-        title={item.title}
-        content={item.content}
-        step={step}
-        onNext={onNext}
-        open={current === step}
-      />
-    );
-  });
-}
+import useStore from '../lib/useStore';
 
 export default function Question(
-  { question }:
-  Readonly<{question: QuestionDefinition}>)
+  { question, index }:
+  Readonly<{ question: QuestionDefinition, index: number }>)
 {
-  const [currentStep, setCurrentStep] = useState(0);
-  const survey = 'Name of survey'
-  const onNext = () => {
-    setCurrentStep(currentStep + 1);
-  }
+  const {currentQuestion, currentStep, setNextStep} = useStore()
+  const survey = question.pollName;
+
+  console.log(index, currentQuestion, index !== currentQuestion);
+  if (index !== currentQuestion) return null
 
   return (
     <>
-      {renderExplanations(
-        survey,
-        question.explanations,
-        onNext,
-        currentStep
-      )}
+      {
+        question.explanations.map(
+          (item, step) =>
+            <Explanation
+              key={`${survey}_${step}`}
+              survey={survey}
+              title={item.title}
+              content={item.content}
+              step={step}
+              onNext={setNextStep}
+              open={currentStep === step}
+            />
+        )
+      }
     </>
   );
 }
