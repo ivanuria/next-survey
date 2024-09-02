@@ -1,31 +1,13 @@
 import { useState } from 'react';
 import Explanation from "./Explanation";
-
-const question = [
-  {
-    type: 'explanation',
-    title: 'This is a try',
-    content: 'Nothing to say yet'
-  },
-  {
-    type: 'navigation',
-    to: '/'
-  },
-  {
-    type: 'objective',
-    target: 'noreem'
-  }
-];
+import { QuestionDefinition } from '../lib/definitions';
 
 function renderExplanations(
   survey: string,
   question:
   {
-    type: string,
-    title?: string,
-    content?: string,
-    to?: string,
-    target?: string,
+    title: string,
+    content: string
   }[],
   onNext: Function,
   current: number
@@ -33,25 +15,24 @@ function renderExplanations(
   const explanationsToReturn = [];
 
   question.forEach((item, step) => {
-    if (item.type && item.type === 'explanation') {
-      if (!item.title) return;
-      if (!item.content) return;
-      explanationsToReturn.push(
-        <Explanation
-          key={`${survey}_${step}`}
-          survey={survey}
-          title={item.title}
-          content={item.content}
-          step={step}
-          onNext={onNext}
-          open={current === step}
-        />
-      )
-    }
+    explanationsToReturn.push(
+      <Explanation
+        key={`${survey}_${step}`}
+        survey={survey}
+        title={item.title}
+        content={item.content}
+        step={step}
+        onNext={onNext}
+        open={current === step}
+      />
+    );
   });
 }
 
-export default function Question() {
+export default function Question(
+  { question }:
+  Readonly<{question: QuestionDefinition}>)
+{
   const [currentStep, setCurrentStep] = useState(0);
   const survey = 'Name of survey'
   const onNext = () => {
@@ -62,7 +43,7 @@ export default function Question() {
     <>
       {renderExplanations(
         survey,
-        question,
+        question.explanations,
         onNext,
         currentStep
       )}
